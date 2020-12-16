@@ -1,5 +1,5 @@
 import tkinter as tk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageChops
 from tkinter.filedialog import askopenfilename
 root = tk.Tk()
 image1 = Image.Image()
@@ -10,7 +10,7 @@ gradient = Image.Image()
 def open_file():
 
         #file = askopenfile(parent=root, mode='rb', title="Choose a file...", filetype=[("JPEG Image","*.jpg")])
-        file = askopenfilename(parent=root, title="Choose a file...", filetype=[("JPEG Image", "*.jpg")])
+        file = askopenfilename(parent=root, title="Choose a file...", filetype=[("PNG Image", "*.png")])
         if file:
             image = Image.open(file)
             edit = file.split("/")
@@ -38,6 +38,10 @@ def btn3_handler():
 
 def do_mush():
     print('doing the mush')
+    input1 = image1.load()
+    input2 = image2.load()
+    newImage = ImageChops.multiply(image1, image2)
+    newImage.save('cool.jpg')
 
 
 canvas = tk.Canvas(root, width = 400, height=700, bg="#94b573")
