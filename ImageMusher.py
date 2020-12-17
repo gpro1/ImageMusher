@@ -1,15 +1,16 @@
 import tkinter as tk
+import random
+import time
 from PIL import Image, ImageTk, ImageChops
 from tkinter.filedialog import askopenfilename
 root = tk.Tk()
 image1 = Image.Image()
 image2 = Image.Image()
 gradient = Image.Image()
-
+random.seed(time.time())
 
 def open_file():
 
-        #file = askopenfile(parent=root, mode='rb', title="Choose a file...", filetype=[("JPEG Image","*.jpg")])
         file = askopenfilename(parent=root, title="Choose a file...", filetype=[("PNG Image", "*.png")])
         if file:
             image = Image.open(file)
@@ -40,8 +41,33 @@ def do_mush():
     print('doing the mush')
     input1 = image1.load()
     input2 = image2.load()
-    newImage = ImageChops.multiply(image1, image2)
-    newImage.save('cool.jpg')
+    output = gradient.load()
+    xsize, ysize = gradient.size
+
+    if image1.size[0] > image2.size[0]:
+        inputx = image2.size[0]
+    else :
+        inputx = image1.size[0]
+
+    if image1.size[1] > image2.size[1]:
+        inputy = image2.size[1]
+    else :
+        inputy = image1.size[1]
+
+    #Use gradient as a probability matrix to select which image to take a pixel from
+    for x in range(xsize):
+        for y in range(ysize):
+            if y >= inputy or x >= inputx :
+                output[x, y] = 255
+                break;
+
+            rando = random.randint(0,255)
+            if rando > output[x,y]:
+                output[x,y] = input1[x,y]
+            else:
+                output[x,y] = input2[x,y]
+
+    gradient.save('output.jpg')
 
 
 canvas = tk.Canvas(root, width = 400, height=700, bg="#94b573")
